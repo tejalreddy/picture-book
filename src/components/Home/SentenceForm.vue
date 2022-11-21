@@ -10,8 +10,11 @@
         @click="addSentence">Enter Sentence</button>
     </section>
     <section>
-        <p>Suggested sentence:</p>
-        <p>{{ sentence }}</p>
+        <p>Suggested sentences:</p>
+        <p v-for="item in sentences"
+            :key="item">
+            {{ item }}
+        </p>
     </section>
 </section>
 </template>
@@ -25,7 +28,7 @@ export default {
             draft: this.$store.state.currentSentence,
             alerts: {},
             constantPre: `This is a story about ${this.$store.state.currentTitle}. Write one more sentence of the story. The following is the most recent sentence of the story: `,
-            sentence: 'This is the first page of the story, so there is no suggested sentence.',
+            sentences: ['This is the first page of the story, so there is no suggested sentence.'],
             previousSentence: `This is a story about ${this.$store.state.currentTitle}`
         }
     },
@@ -53,9 +56,9 @@ export default {
             // if the sentence has already been generated
             } else {
                 if (val === 1) {
-                    this.sentence = 'This is the first page of the story, so there is no suggested sentence.'
+                    this.sentences = ['This is the first page of the story, so there is no suggested sentence.']
                 } else {
-                    this.sentence = this.$store.state.pages[val].generatedSentence
+                    this.sentences = this.$store.state.pages[val].generatedSentences
                 }
             }
         }
@@ -67,13 +70,14 @@ export default {
         generateSentence() {
             const params = {
                 method: 'POST',
-                message: 'Successfully added freet to category',
+                message: 'Successfully added generated sentences',
                 body: JSON.stringify({
                     model: "text-davinci-002", 
                     prompt: this.previousSentence,
                     temperature: .7,
                     max_tokens: 96,
                     top_p: 1,
+                    n:3,
                     frequency_penalty: 0,
                     presence_penalty: .3
                 }),
@@ -105,9 +109,8 @@ export default {
                 }
                 
                 const res = await r.json();
-                this.sentence = res.choices[0].text;
-                this.$emit('generatedSentence', {pageNum: this.pageNum, sentence: this.sentence});
-                // this.$store.commit("refreshGeneratedSentence", {pageNum: this.pageNum, sentence: this.sentence});
+                this.sentences = res.choices.map(choice => choice.text);
+                this.$emit('generatedSentence', {pageNum: this.pageNum, sentences: this.sentences});
             } catch (e) {
                 console.log(e);
                 // this.$set(this.alerts, e, 'error');

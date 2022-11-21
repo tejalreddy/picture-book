@@ -15,12 +15,6 @@ Vue.use(Vuex);
     state: {
       currentTitle: "", // the current title for the page being worked on
       pages: {}, // holds all of the pages currently made
-      singlePage: { // represents a single page
-        picture: "", 
-        caption: "", 
-        previousSentence: "", 
-        generatedSentence: ""
-      },
       pageCount: 0, // current number of pages being held
       currentSentence: "", // the current sentence being worked on
       alerts: {}, // global success/error messages encountered during submissions to non-visible forms
@@ -82,9 +76,9 @@ Vue.use(Vuex);
         refreshGeneratedSentence(state, payload) {
           /**
            * Stores the generated sentence for a given page
-           * payload = {pageNum: int, sentence: string}
+           * payload = {pageNum: int, sentence: []}
            */
-          state.pages[payload.pageNum].generatedSentence = payload.sentence;
+          state.pages[payload.pageNum].generatedSentences = payload.sentences;
         }
     },
     plugins: [createPersistedState({storage: window.sessionStorage})]

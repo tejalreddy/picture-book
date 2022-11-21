@@ -105,7 +105,7 @@ export default {
 } 
 
 .finish-button {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .top-of-page {
@@ -117,10 +117,6 @@ export default {
 .picture-display {
   margin-top: 1.5em;
 }
-
-/* .page-component {
-  margin-right: auto;
-} */
 
 
 </style>
