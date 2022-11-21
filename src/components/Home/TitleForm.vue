@@ -43,7 +43,7 @@ export default {
 }
 
 .title-content {
-  width: 70%;
+  width: 300px;
   height:50px;
   padding: 12px 20px;
   box-sizing: border-box;

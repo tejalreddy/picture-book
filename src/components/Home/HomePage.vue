@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="container">
 
     <section v-if="$store.state.currentTitle === ''">
       <h2>Add a title to begin a new story!</h2>
@@ -7,16 +7,26 @@
       </TitleForm>
     </section>
 
-    <section v-if="$store.state.currentTitle !== ''">
-      <div class="top-page">
-        <TitleForm class="title-form">
+    <div class="page-component"
+        v-for="index in Object.keys($store.state.pages).length"
+        :key="index">
+        <PageComponent
+          :pageNumber="index"
+          @boxClicked="getPage"
+        />
+    </div>
+
+    <section class="container-body"
+    v-if="$store.state.currentTitle !== ''">
+      <div class="top-of-page">
+        <TitleForm>
         </TitleForm>
         <h1>Currently editing page {{ currentPage }}</h1>
         <PictureDisplay class="picture-display">
         </PictureDisplay>
       </div>
-      <section class="test-flex">
-        <div class="home">
+      <section>
+        <div>
           <SentenceForm
             class="sentence-form"
             @generatedSentence="generatedSentence"
@@ -29,15 +39,9 @@
         </div>
       </section>
 
-  </section>
-  <div class="page-component"
-        v-for="index in Object.keys($store.state.pages).length"
-        :key="index">
-        <PageComponent
-          :pageNumber="index"
-          @boxClicked="getPage"
-        />
-    </div>
+    </section>
+    <p></p>
+    <p></p>
 </article>
 </template>
 
@@ -86,31 +90,25 @@ export default {
 
 <style scoped>
 
-.test-flex {
-  flex-direction: column;
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.home {
-  display:flex;
-  justify-content: center;
-  align-items: center;
+.container-body {
+  justify-self:center;
 }
 
-/* /* .title-form {
-  align-self: flex-start;
-} 
-*/
 .sentence-form {
-  position: absolute;
-  bottom: 8em;
+  margin-top: 40px;
 } 
 
 .finish-button {
-  position: absolute;
-  bottom: 2em;
+  margin-top: 40px;
 }
 
-.top-page {
+.top-of-page {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -120,8 +118,9 @@ export default {
   margin-top: 1.5em;
 }
 
-.page-component {
-  margin-top: 0px;
-}
+/* .page-component {
+  margin-right: auto;
+} */
+
 
 </style>
