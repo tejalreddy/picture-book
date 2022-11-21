@@ -48,7 +48,7 @@ export default {
         },
         pageNum(val) {
             // if the suggested sentence has not been generated
-            if (!(val in this.$store.state.pages)) {
+            if (val !== 1 && this.$store.state.pages[val].generatedSentences.length === 0) {
                 this.previousSentence = this.$store.state.pages[val - 1].caption
                 this.previousSentence = this.constantPre + this.previousSentence;
                 this.generateSentence();
@@ -99,7 +99,8 @@ export default {
             if (params.body) {
                 options.body = params.body;
             }
-
+            
+            console.log(options);
             try {
                 const r = await fetch(`https://api.openai.com/v1/completions`, options);
                 if (!r.ok) {
@@ -110,7 +111,7 @@ export default {
                 
                 const res = await r.json();
                 this.sentences = res.choices.map(choice => choice.text);
-                this.$emit('generatedSentence', {pageNum: this.pageNum, sentences: this.sentences});
+                this.$store.commit("refreshGeneratedSentence", {pageNum: this.pageNum, sentences: this.sentences});
             } catch (e) {
                 console.log(e);
                 // this.$set(this.alerts, e, 'error');

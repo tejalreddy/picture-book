@@ -6,7 +6,12 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  created () {
+    if (Object.keys(this.$store.state.pages).length === 0) {
+      this.$store.commit('createPage')
+    }
+  }
 }
 </script>
 

@@ -15,7 +15,6 @@ Vue.use(Vuex);
     state: {
       currentTitle: "", // the current title for the page being worked on
       pages: {}, // holds all of the pages currently made
-      pageCount: 0, // current number of pages being held
       currentSentence: "", // the current sentence being worked on
       alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     },
@@ -41,9 +40,9 @@ Vue.use(Vuex);
            */
           state.currentSentence = payload;
         },
-        refreshPages(state, payload) {
+        editPage(state, payload) {
           /**
-           * Adds a page to the current pages
+           * Edits a page that already exists
            */
           let previousSentence = `This is a story about ${state.currentTitle}`;
           if (payload in state.pages) {
@@ -57,22 +56,25 @@ Vue.use(Vuex);
             page.caption = state.currentSentence;
             page.previousSentence = previousSentence;
             state.pages[payload] = page;
-
-          } else {
-            state.pageCount = state.pageCount + 1;
-
-            if (state.pageCount - 1 >= 1) {
-              previousSentence = state.pages[state.pageCount - 1].caption;
-            }
-
-            const page = new Page();
-            page.caption = state.currentSentence;
-            page.previousSentence = previousSentence;
-            state.pages[state.pageCount] = page;
+            state.currentSentence =  state.pages[Object.keys(state.pages).length].currentSentence;
           }
-
-          state.currentSentence = "";
         },
+        createPage(state) {
+          /**
+           * Adds a new page
+           */
+          console.log('here now!');
+          let previousSentence = `This is a story about ${state.currentTitle}`;
+          if (Object.keys(state.pages).length - 1 >= 1) {
+            previousSentence = state.pages[Object.keys(state.pages).length - 1].caption;
+          }
+          const page = new Page();
+          page.caption = '';
+          page.previousSentence = '';
+          console.log(Object.keys(state.pages).length + 1);
+          state.pages[Object.keys(state.pages).length + 1] = page;
+        },
+
         refreshGeneratedSentence(state, payload) {
           /**
            * Stores the generated sentence for a given page

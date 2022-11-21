@@ -1,19 +1,23 @@
 <template>
-  <article class="container">
+  <article>
 
-    <section v-if="$store.state.currentTitle === ''">
+    <section v-if="$store.state.currentTitle === ''"
+      class="title-section">
       <h2>Add a title to begin a new story!</h2>
-      <TitleForm class="title-form">
-      </TitleForm>
+      <TitleForm></TitleForm>
     </section>
 
+    <article class="container">
     <div class="page-component"
-        v-for="index in Object.keys($store.state.pages).length"
-        :key="index">
-        <PageComponent
-          :pageNumber="index"
-          @boxClicked="getPage"
-        />
+        v-if="$store.state.currentTitle !== ''">
+      <div
+          v-for="index in Object.keys($store.state.pages).length"
+          :key="index">
+          <PageComponent
+            :pageNumber="index"
+            @boxClicked="getPage"
+          />
+      </div>
     </div>
 
     <section class="container-body"
@@ -40,8 +44,9 @@
       </section>
 
     </section>
-    <p></p>
-    <p></p>
+    <p v-if="$store.state.currentTitle !== ''"></p>
+    <p v-if="$store.state.currentTitle !== ''"></p>
+  </article>
 </article>
 </template>
 
@@ -56,33 +61,28 @@ export default {
     name: 'HomePage',
     components: {TitleForm, SentenceForm, PageComponent, PictureDisplay},
     data() {
-    return {
-      editing: false,
-      currentPage: this.$store.state.pageCount + 1,
-      previousSentence: "",
-      refreshGenerated: {pageNum: 1, sentence: `This is a story about ${this.$store.state.currentTitle}`},
-      alerts: {},
-    }
+      return {
+        editing: false,
+        currentPage: Object.keys(this.$store.state.pages).length,
+        previousSentence: "",
+        refreshGenerated: {pageNum: 1, sentence: `This is a story about ${this.$store.state.currentTitle}`},
+        alerts: {},
+      }
     },
     methods: {
       finishPage() {
-        if (this.editing) {
-          this.$store.commit("refreshPages", this.currentPage);
-        } else {
-          this.$store.commit("refreshPages", -1);
-          this.$store.commit("refreshGeneratedSentence", this.refreshGenerated);
+        this.$store.commit("editPage", this.currentPage);
+        if (!this.editing) {
+          this.$store.commit('createPage');
         }
         this.editing = false;
-        this.currentPage = this.$store.state.pageCount + 1
+        this.currentPage = Object.keys(this.$store.state.pages).length
       },
       getPage(value) {
         const page = this.$store.state.pages[value]
         this.$store.commit("changeSentence", page.caption);
         this.editing = true;
         this.currentPage = value;
-      },
-      generatedSentence(value) {
-        this.refreshGenerated = value;
       }
     }
 }
@@ -96,8 +96,8 @@ export default {
   align-items: flex-start;
 }
 
-.container-body {
-  justify-self:center;
+.title-section {
+  align-self: center;
 }
 
 .sentence-form {
@@ -118,5 +118,10 @@ export default {
   margin-top: 1.5em;
 }
 
+.page-component {
+  flex-direction: column;
+  height: 1000px;
+  overflow: scroll;
+}
 
 </style>
