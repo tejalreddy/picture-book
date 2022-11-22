@@ -39,7 +39,7 @@
           </SentenceForm>
           <button
             class="finish-button button-74"
-            @click="finishPage">Finish Page
+            @click="finishPage">Save Page
           </button>
         </div>
       </section>
