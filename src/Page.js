@@ -5,5 +5,7 @@ export default class Page {
         this.caption = ''
         this.previousSentence = ''
         this.generatedSentences = []
+        this.allImages = []
+        this.selectedImage = -1
     }
 }

@@ -1,43 +1,132 @@
 <template>
-    <section class="box-container">
-        <section class="box">
-            <!-- <img
-                class="box left-image"
-                :src=" 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/17/39/cola-0247.jpg' "/> -->
+<section>
+    <h2 v-if="this.images.length === 0">No images generated</h2>
+    <div v-if="this.images.length > 0">
+        <section class="box-container">
+            <section class="box">
+                <img
+                    @click="imgClicked(0)"
+                    class="box regular-image"
+                    :style="{'box-shadow': selected[0] ? '0px 0px 10px 10px yellow' : ''}"
+                    :src="images[0]"/>
+            </section>
+            <section class="box">
+                <img
+                    @click="imgClicked(1)"
+                    class="box regular-image"
+                    :style="{'box-shadow': selected[1] ? '0px 0px 10px 10px yellow' : ''}"
+                    :src="images[1]"/>
+            </section>
+            <section class="box">
+                <img
+                    @click="imgClicked(2)"
+                    class="box regular-image"
+                    :style="{'box-shadow': selected[2] ? '0px 0px 10px 10px yellow' : ''}"
+                    :src="images[2]"/>
+            </section>
+            <section class="box">
+                <img
+                    @click="imgClicked(3)"
+                    class="box regular-image"
+                    :style="{'box-shadow': selected[3] ? '0px 0px 10px 10px yellow' : ''}"
+                    :src="images[3]"/>
+            </section>
         </section>
-        <section class="box">
-            <!-- <img
-                class="box left-image"
-                :src=" 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/17/39/cola-0247.jpg' "/> -->
-        </section>
-        <section class="box">
-            <!-- <img
-                class="box left-image"
-                :src=" 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/17/39/cola-0247.jpg' "/> -->
-        </section>
-        <section class="box">
-            <!-- <img
-                class="box left-image"
-                :src=" 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/17/39/cola-0247.jpg' "/> -->
-        </section>
-    </section>
+    </div>
+</section>
 </template>
 
 <script>
 /* eslint-disable */
 export default {
     name: 'PictureDisplay',
+    props: {
+        // the published sentence from the previous page
+        pageNum: {
+            type: Number,
+            required: false
+        }
+    },
     data() {
         return {
+            selected: [false, false, false, false], // top_left, top_right, bottom_left, bottom_right
+            images: [],
             alerts: {}
         }
     },
-    methods: {
-
-    },
     watch: {
         '$store.state.currentSentence': function() {
-            console.log(this.$store.state.currentSentence);
+            // if there are no generated images but there is a sentence then we want to generate
+            // if there are generated images but the sentence is different then we want to generate
+            if (this.$store.state.currentSentence !== '') {
+                if (this.$store.state.pages[this.pageNum].allImages.length === 0) {
+                    this.generateImages();
+                } else {
+                    if (this.$store.state.currentSentence !== this.$store.state.pages[this.pageNum].caption) {
+                        this.generateImages();
+                    }
+                }
+            } else {
+                this.images = this.$store.state.pages[this.pageNum].allImages
+            }
+        },
+        pageNum (val) {
+            this.images = this.$store.state.pages[val].allImages;
+            this.selected = [false, false, false, false];
+            if (this.$store.state.pages[val].selectedImage > -1) {
+                this.selected[this.$store.state.pages[val].selectedImage] = true;
+            }
+        }
+    },
+    methods: {
+        imgClicked(imgIndex) {
+            this.selected = [false, false, false, false];
+            this.selected[imgIndex] = true;
+            this.$store.commit("refreshSelectedImage", {pageNum: this.pageNum, image: imgIndex});
+        },
+        generateImages() {
+            const params = {
+                method: 'POST',
+                message: 'Successfully generated images',
+                body: JSON.stringify({
+                    prompt: this.$store.state.currentSentence,
+                    n: 4,
+                    size: '256x256',
+                }),
+                // callback: () => {
+                //     this.$set(this.alerts, params.message, 'success');
+                //     setTimeout(() => this.$delete(this.alerts, params.message), 3000);
+                // }
+            };
+            this.request(params);
+        },
+        async request(params) {
+            const options = {
+                method: params.method, headers: 
+                {'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.VUE_APP_OPENAI_KEY}`}
+            };
+            if (params.body) {
+                options.body = params.body;
+            }
+            
+            try {
+                const r = await fetch(`https://api.openai.com/v1/images/generations`, options);
+                if (!r.ok) {
+                    const res = await r.json();
+                    console.log(res);
+                    throw new Error(res.error);
+                }
+                
+                const res = await r.json();
+                this.selected = [false, false, false, false];
+                this.images = res.data.map(data_url => data_url.url);
+                this.$store.commit("refreshGeneratedImages", {pageNum: this.pageNum, images: this.images})
+            } catch (e) {
+                console.log(e);
+                // this.$set(this.alerts, e, 'error');
+                // setTimeout(() => this.$delete(this.alerts, e), 3000);
+            }
         }
     }
 }
@@ -52,8 +141,9 @@ export default {
     background-color: lightgray;
 }
 
-.left-image {
+.regular-image {
     object-fit: cover;
+    /* box-shadow: 0px 0px 10px 10px yellow; */
 }
 
 .box-container {

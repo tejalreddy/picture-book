@@ -11,8 +11,8 @@
     </section>
     <section>
         <p>Suggested sentences:</p>
-        <p v-for="item in sentences"
-            :key="item">
+        <p v-for="(item, index) in sentences"
+            :key="index">
             {{ item }}
         </p>
     </section>
@@ -100,7 +100,6 @@ export default {
                 options.body = params.body;
             }
             
-            console.log(options);
             try {
                 const r = await fetch(`https://api.openai.com/v1/completions`, options);
                 if (!r.ok) {

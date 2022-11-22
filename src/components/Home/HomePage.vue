@@ -26,14 +26,15 @@
         <TitleForm>
         </TitleForm>
         <h1>Currently editing page {{ currentPage }}</h1>
-        <PictureDisplay class="picture-display">
+        <PictureDisplay
+          class="picture-display"
+          :pageNum="currentPage">
         </PictureDisplay>
       </div>
       <section>
         <div>
           <SentenceForm
             class="sentence-form"
-            @generatedSentence="generatedSentence"
             :pageNum="currentPage">
           </SentenceForm>
           <button
@@ -72,7 +73,7 @@ export default {
     methods: {
       finishPage() {
         this.$store.commit("editPage", this.currentPage);
-        if (!this.editing) {
+        if (this.currentPage === Object.keys(this.$store.state.pages).length) {
           this.$store.commit('createPage');
         }
         this.editing = false;
@@ -80,9 +81,9 @@ export default {
       },
       getPage(value) {
         const page = this.$store.state.pages[value]
+        this.currentPage = value;
         this.$store.commit("changeSentence", page.caption);
         this.editing = true;
-        this.currentPage = value;
       }
     }
 }

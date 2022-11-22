@@ -56,7 +56,7 @@ Vue.use(Vuex);
             page.caption = state.currentSentence;
             page.previousSentence = previousSentence;
             state.pages[payload] = page;
-            state.currentSentence =  state.pages[Object.keys(state.pages).length].currentSentence;
+            state.currentSentence =  state.pages[Object.keys(state.pages).length].currentSentence ? state.pages[Object.keys(state.pages).length].currentSentence : '';
           }
         },
         createPage(state) {
@@ -73,6 +73,7 @@ Vue.use(Vuex);
           page.previousSentence = '';
           console.log(Object.keys(state.pages).length + 1);
           state.pages[Object.keys(state.pages).length + 1] = page;
+          state.currentSentence = '';
         },
 
         refreshGeneratedSentence(state, payload) {
@@ -81,6 +82,20 @@ Vue.use(Vuex);
            * payload = {pageNum: int, sentence: []}
            */
           state.pages[payload.pageNum].generatedSentences = payload.sentences;
+        },
+        refreshGeneratedImages(state, payload) {
+          /**
+           * Stores all the generated images for a page
+           * payload = {pageNum: int, images: []}
+           */
+           state.pages[payload.pageNum].allImages = payload.images;
+        },
+        refreshSelectedImage(state, payload) {
+          /**
+           * Holds the selected image for a page
+           * payload = {pageNum: int, image: number}
+           */
+           state.pages[payload.pageNum].selectedImage = payload.image;
         }
     },
     plugins: [createPersistedState({storage: window.sessionStorage})]
