@@ -3,7 +3,16 @@
         <div @click="boxClicked"
             :id="pageNumber"
             class="page-box">
-            <h1 class="box-text">{{ pageNumber }}</h1>
+            <div class="box-content">
+                <div class="picture-box">
+                    <img
+                        class="picture-box regular-image"
+                        :src="$store.state.pages[pageNumber].allImages[$store.state.pages[pageNumber].selectedImage]"/>
+                </div>
+                <h1 class="box-text">
+                    {{ $store.state.pages[pageNumber].caption }}
+                </h1>
+            </div>
         </div>
     </article>
 </template>
@@ -65,17 +74,30 @@ export default {
     height: 300px;
     margin: 1em;
     display: inline-block;
+    overflow-y: scroll;
 }
 
 .box-text {
     text-align: center;
-    margin-top: 2.4em;
-    font-size: 50px;
+    margin-top: 5em;
+    font-size: 10px;
+    /* width: 223px; */
+    white-space:normal;
+    word-wrap:break-word;
 }
 
-/* .page-box:active, .page-box:focus {
-  background-color: #fb8332;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-  transform: translateY(-1px);
-} */
+.picture-box {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: lightgray;
+}
+
+.box-content {
+    margin-top: 3em;
+}
+
+.regular-image {
+    object-fit: cover;
+}
 </style>

@@ -51,7 +51,7 @@ export default {
             if (val !== 1 && this.$store.state.pages[val].generatedSentences.length === 0) {
                 this.previousSentence = this.$store.state.pages[val - 1].caption
                 this.previousSentence = this.constantPre + this.previousSentence;
-                // this.generateSentence();
+                this.generateSentence();
             
             // if the sentence has already been generated
             } else {
@@ -72,7 +72,7 @@ export default {
                 method: 'POST',
                 message: 'Successfully added generated sentences',
                 body: JSON.stringify({
-                    model: "text-davinci-002", 
+                    model: "text-davinci-003", 
                     prompt: this.previousSentence,
                     temperature: .7,
                     max_tokens: 96,
