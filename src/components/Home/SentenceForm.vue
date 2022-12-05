@@ -7,7 +7,7 @@
             @input="draft = $event.target.value"
         />
         <button class="sentence-button button-74"
-        @click="addSentence">Enter Sentence</button>
+        @click="addSentence">Generate Image</button>
     </section>
     <section>
         <p>Suggested sentences:</p>

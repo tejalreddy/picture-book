@@ -39,8 +39,8 @@ export default {
     box-sizing: border-box;
     width: 223px;
     height: 300px;
-    overflow-y: auto;
     margin: 1em;
+    display: inline-block;
 }
 
 .box-text {

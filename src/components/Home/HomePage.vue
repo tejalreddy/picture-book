@@ -7,20 +7,7 @@
       <TitleForm></TitleForm>
     </section>
 
-    <article class="container">
-    <div class="page-component"
-        v-if="$store.state.currentTitle !== ''">
-      <div
-          v-for="index in Object.keys($store.state.pages).length"
-          :key="index">
-          <PageComponent
-            :pageNumber="index"
-            @boxClicked="getPage"
-          />
-      </div>
-    </div>
-
-    <section class="container-body"
+  <section class="container"
     v-if="$store.state.currentTitle !== ''">
       <div class="top-of-page">
         <TitleForm>
@@ -31,23 +18,26 @@
           :pageNum="currentPage">
         </PictureDisplay>
       </div>
-      <section>
-        <div>
-          <SentenceForm
-            class="sentence-form"
-            :pageNum="currentPage">
-          </SentenceForm>
-          <button
-            class="finish-button button-74"
-            @click="finishPage">Save Page
-          </button>
-        </div>
-      </section>
-
+    <section>
+      <SentenceForm
+        class="sentence-form"
+        :pageNum="currentPage">
+      </SentenceForm>
+      <button
+        class="finish-button button-74"
+        @click="finishPage">Save Page
+      </button>
     </section>
-    <p v-if="$store.state.currentTitle !== ''"></p>
-    <p v-if="$store.state.currentTitle !== ''"></p>
-  </article>
+    <div class="page-component"
+      v-if="$store.state.currentTitle !== ''">
+        <PageComponent
+        v-for="index in Object.keys($store.state.pages).length"
+        :key="index"
+          :pageNumber="index"
+          @boxClicked="getPage"
+        />
+    </div>
+  </section>
 </article>
 </template>
 
@@ -94,7 +84,7 @@ export default {
 .container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
 }
 
 .title-section {
@@ -120,9 +110,13 @@ export default {
 }
 
 .page-component {
-  flex-direction: column;
-  height: 1000px;
-  overflow: scroll;
+  display: flex;
+  flex-direction: row;
+  width: 1650px;
+  height: 400px;
+  overflow-x:scroll;
+  white-space: nowrap;
+  margin-top: 40px;
 }
 
 </style>
