@@ -1,6 +1,9 @@
 <template>
   <article>
-
+    <ExportButton
+      v-if="$store.state.currentTitle !== ''"
+      class="export-button">
+    </ExportButton>
     <section v-if="$store.state.currentTitle === ''"
       class="title-section">
       <h2>Add a title to begin a new story!</h2>
@@ -48,10 +51,11 @@ import TitleForm from '@/components/Home/TitleForm.vue'
 import SentenceForm from '@/components/Home/SentenceForm.vue'
 import PageComponent from '@/components/Page/PageComponent.vue'
 import PictureDisplay from '@/components/Home/PictureDisplay.vue'
+import ExportButton from '@/components/Home/ExportButton.vue'
 
 export default {
     name: 'HomePage',
-    components: {TitleForm, SentenceForm, PageComponent, PictureDisplay},
+    components: {TitleForm, SentenceForm, PageComponent, PictureDisplay, ExportButton},
     data() {
       return {
         editing: false,
@@ -118,6 +122,11 @@ export default {
   overflow-x:scroll;
   white-space: nowrap;
   margin-top: 40px;
+}
+
+.export-button {
+  float:right;
+  margin-right: 40px;
 }
 
 </style>
