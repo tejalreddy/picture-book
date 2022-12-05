@@ -139,6 +139,11 @@ export default {
     width: 209px;
     height: 209px;
     background-color: lightgray;
+    border-radius: 25px;
+}
+
+.box:hover {
+    box-shadow: rgba(0, 0, 0, 0.2) 0 4px 12px;
 }
 
 .regular-image {
