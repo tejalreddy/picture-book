@@ -32,8 +32,9 @@
       v-if="$store.state.currentTitle !== ''">
         <PageComponent
         v-for="index in Object.keys($store.state.pages).length"
-        :key="index"
+          :key="index"
           :pageNumber="index"
+          :active="(index === currentPage ? true : false)"
           @boxClicked="getPage"
         />
     </div>

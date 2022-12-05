@@ -1,7 +1,8 @@
 <template>
     <article>
         <div @click="boxClicked"
-        class="page-box">
+            :id="pageNumber"
+            class="page-box">
             <h1 class="box-text">{{ pageNumber }}</h1>
         </div>
     </article>
@@ -16,6 +17,29 @@ export default {
         pageNumber: {
             type: Number,
             required: true
+        },
+        active: {
+            type: Boolean,
+            required: true
+        }
+    },
+    watch: {
+        active: function(val) {
+            const box = document.getElementById(this.pageNumber);
+            if (val) {
+                box.style.transform = 'translateY(-13px)';
+                box.style.boxShadow = 'rgba(0, 0, 0, 0.3) 0 4px 12px'
+            } else {
+                box.style.transform = 'translateY(0px)';
+                box.style.boxShadow = 'rgba(0, 0, 0, 0) 0 4px 12px';
+            }
+        }
+    },
+    mounted() {
+        if (this.active) {
+            const box = document.getElementById(this.pageNumber);
+            box.style.transform = 'translateY(-15px)';
+            box.style.boxShadow = 'rgba(0, 0, 0, 0.2) 0 4px 12px'
         }
     },
     data() {
@@ -48,4 +72,10 @@ export default {
     margin-top: 2.4em;
     font-size: 50px;
 }
+
+/* .page-box:active, .page-box:focus {
+  background-color: #fb8332;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  transform: translateY(-1px);
+} */
 </style>

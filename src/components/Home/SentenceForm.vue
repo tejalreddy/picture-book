@@ -51,7 +51,7 @@ export default {
             if (val !== 1 && this.$store.state.pages[val].generatedSentences.length === 0) {
                 this.previousSentence = this.$store.state.pages[val - 1].caption
                 this.previousSentence = this.constantPre + this.previousSentence;
-                this.generateSentence();
+                // this.generateSentence();
             
             // if the sentence has already been generated
             } else {
