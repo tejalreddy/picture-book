@@ -1,7 +1,7 @@
 <template>
     <section class="page">
         <div class="picture-box">
-            <img
+            <img v-if="($store.state.pages[pageNumber].allImages.length > 0)"
             class="picture-box regular-image"
             :src="'data:image/jpeg;base64,' + $store.state.pages[pageNumber].allImages[$store.state.pages[pageNumber].selectedImage]"/>
         </div>
