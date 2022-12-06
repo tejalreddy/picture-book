@@ -13,7 +13,7 @@
         :enable-download="true"
         :preview-modal="true"
         :paginate-elements-by-height="1400"
-        filename="picture-book-pdf"
+        filename="picture-book"
         :pdf-quality="2"
         :manual-pagination="false"
         pdf-format="a4"
@@ -23,9 +23,14 @@
         ref="html2Pdf"
         >
         <section slot="pdf-content">
-            <PagePdfTemplate
-                :pageNumber="1"
-            />
+            <div
+                v-for="index in Object.keys($store.state.pages).length"
+                :key="index">
+                <PagePdfTemplate
+                    :pageNumber="index"
+                />
+                <div class="html2pdf__page-break"></div>
+            </div>
         </section>
     </vue-html2pdf>
     </section>
