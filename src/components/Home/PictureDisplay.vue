@@ -8,28 +8,28 @@
                     @click="imgClicked(0)"
                     class="box regular-image"
                     :style="{'box-shadow': selected[0] ? '0px 0px 10px 10px yellow' : ''}"
-                    :src="images[0]"/>
+                    :src="'data:image/jpeg;base64,' + images[0]"/>
             </section>
             <section class="box">
                 <img
                     @click="imgClicked(1)"
                     class="box regular-image"
                     :style="{'box-shadow': selected[1] ? '0px 0px 10px 10px yellow' : ''}"
-                    :src="images[1]"/>
+                    :src="'data:image/jpeg;base64,' + images[1]"/>
             </section>
             <section class="box">
                 <img
                     @click="imgClicked(2)"
                     class="box regular-image"
                     :style="{'box-shadow': selected[2] ? '0px 0px 10px 10px yellow' : ''}"
-                    :src="images[2]"/>
+                    :src="'data:image/jpeg;base64,' + images[2]"/>
             </section>
             <section class="box">
                 <img
                     @click="imgClicked(3)"
                     class="box regular-image"
                     :style="{'box-shadow': selected[3] ? '0px 0px 10px 10px yellow' : ''}"
-                    :src="images[3]"/>
+                    :src="'data:image/jpeg;base64,' + images[3]"/>
             </section>
         </section>
     </div>
@@ -92,11 +92,8 @@ export default {
                     prompt: this.$store.state.currentSentence,
                     n: 4,
                     size: '256x256',
+                    response_format: 'b64_json',
                 }),
-                // callback: () => {
-                //     this.$set(this.alerts, params.message, 'success');
-                //     setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-                // }
             };
             this.request(params);
         },
@@ -104,7 +101,8 @@ export default {
             const options = {
                 method: params.method, headers: 
                 {'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.VUE_APP_OPENAI_KEY}`}
+                'Authorization': `Bearer ${process.env.VUE_APP_OPENAI_KEY}`,
+                'Access-Control-Allow-Origin': '*'}
             };
             if (params.body) {
                 options.body = params.body;
@@ -119,8 +117,9 @@ export default {
                 }
                 
                 const res = await r.json();
+                console.log(res);
                 this.selected = [false, false, false, false];
-                this.images = res.data.map(data_url => data_url.url);
+                this.images = res.data.map(data_json => data_json.b64_json);
                 this.$store.commit("refreshGeneratedImages", {pageNum: this.pageNum, images: this.images})
             } catch (e) {
                 console.log(e);

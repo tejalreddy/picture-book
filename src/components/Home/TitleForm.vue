@@ -7,7 +7,7 @@
     />
     <button
     class="title-button button-74"
-    @click="addTitle">Edit Title</button>
+    @click="addTitle">Save Title</button>
 </section>
 </template>
 

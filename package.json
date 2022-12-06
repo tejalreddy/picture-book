@@ -13,6 +13,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "vue": "^2.7.13",
+    "vue-html2pdf": "^1.8.0",
     "vue-router": "^3.6.5",
     "vuex": "^3.6.2",
     "vuex-persistedstate": "^4.1.0"
