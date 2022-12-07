@@ -1,6 +1,21 @@
 <template>
 <section>
-    <h2 v-if="this.images.length === 0">No images generated</h2>
+    <div v-if="this.images.length === 0">
+        <section class="box-container">
+            <div class="empty-box">
+                <p class="box-text">No image generated</p>
+            </div>
+            <div class="empty-box">
+                <p class="box-text">No image generated</p>
+            </div>
+            <div class="empty-box">
+                <p class="box-text">No image generated</p>
+            </div>
+            <div class="empty-box">
+                <p class="box-text">No image generated</p>
+            </div>
+        </section>
+    </div>
     <div v-if="this.images.length > 0">
         <section class="box-container">
             <section class="box">
@@ -141,6 +156,15 @@ export default {
     border-radius: 25px;
 }
 
+.empty-box {
+    display: inline-block;
+    width: 209px;
+    height: 209px;
+    background-color: lightgray;
+    border-radius: 25px;
+    margin: 2.5px;
+}
+
 .box:hover {
     box-shadow: rgba(0, 0, 0, 0.2) 0 4px 12px;
 }
@@ -149,9 +173,14 @@ export default {
     object-fit: cover;
 }
 
+.box-text {
+    text-align: center;
+    font-size: 13px;
+}
+
 .box-container {
     float: left;
-    width: 425px;
+    width: 440px;
     align-items: center;
 }
 
