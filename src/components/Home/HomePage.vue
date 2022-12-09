@@ -72,11 +72,17 @@ export default {
         currentPage: Object.keys(this.$store.state.pages).length,
         previousSentence: "",
         refreshGenerated: {pageNum: 1, sentence: `This is a story about ${this.$store.state.currentTitle}`},
-        alerts: {},
       }
     },
     methods: {
       finishPage() {
+        if (!(this.$store.state.pages[this.currentPage].selectedImage > -1)) {
+          const message = 'No image has been selected';
+          this.$store.commit('alert', {
+              message: message, status: 'error'
+          });
+          return;
+        }
         this.$store.commit("editPage", this.currentPage);
         if (this.currentPage === Object.keys(this.$store.state.pages).length) {
           this.$store.commit('createPage');

@@ -23,6 +23,13 @@ export default {
     },
     methods: {
         addTitle() {
+            if (this.draft.length > 140) {
+                const message = 'Title is longer than 140 characters';
+                this.$store.commit('alert', {
+                    message: message, status: 'error'
+                });
+                return;
+            }
             this.$store.commit('changeTitle', this.draft);
         }
     }

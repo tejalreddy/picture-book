@@ -65,7 +65,14 @@ export default {
     },
     methods: {
         addSentence() {
-            this.$store.commit('changeSentence', this.draft);
+            if (this.draft.length > 140) {
+                const message = 'Sentence length is greater than 140 characters';
+                this.$store.commit('alert', {
+                    message: message, status: 'error'
+                });
+            } else {
+                this.$store.commit('changeSentence', this.draft);
+            }
         },
         generateSentence() {
             const params = {
