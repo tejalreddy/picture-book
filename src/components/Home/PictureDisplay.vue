@@ -127,12 +127,10 @@ export default {
                 const r = await fetch(`https://api.openai.com/v1/images/generations`, options);
                 if (!r.ok) {
                     const res = await r.json();
-                    console.log(res);
                     throw new Error(res.error);
                 }
                 
                 const res = await r.json();
-                console.log(res);
                 this.selected = [false, false, false, false];
                 this.images = res.data.map(data_json => data_json.b64_json);
                 this.$store.commit("refreshGeneratedImages", {pageNum: this.pageNum, images: this.images})

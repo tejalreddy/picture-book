@@ -63,7 +63,6 @@ Vue.use(Vuex);
           /**
            * Adds a new page
            */
-          console.log('here now!');
           let previousSentence = `This is a story about ${state.currentTitle}`;
           if (Object.keys(state.pages).length - 1 >= 1) {
             previousSentence = state.pages[Object.keys(state.pages).length - 1].caption;
@@ -71,7 +70,6 @@ Vue.use(Vuex);
           const page = new Page();
           page.caption = '';
           page.previousSentence = '';
-          console.log(Object.keys(state.pages).length + 1);
           state.pages[Object.keys(state.pages).length + 1] = page;
           state.currentSentence = '';
         },

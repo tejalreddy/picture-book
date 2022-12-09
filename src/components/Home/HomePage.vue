@@ -1,9 +1,9 @@
 <template>
   <article>
-    <ExportButton
+    <!-- <ExportButton
       v-if="$store.state.currentTitle !== ''"
       class="export-button">
-    </ExportButton>
+    </ExportButton> -->
     <section v-if="$store.state.currentTitle === ''"
       class="title-section">
       <h2>Add a title to begin a new story!</h2>
@@ -38,6 +38,7 @@
           :key="index"
           :pageNumber="index"
           :active="(index === currentPage ? true : false)"
+          :selectedImage="$store.state.pages[index].selectedImage"
           @boxClicked="getPage"
         />
     </div>

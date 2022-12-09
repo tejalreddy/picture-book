@@ -3,10 +3,11 @@
         <div @click="boxClicked"
             :id="pageNumber"
             class="page-box">
-            <div class="box-content">
-                <div class="picture-box">
+            <div v-if="(selectedImage > -1)"
+                class="box-content">
+                <div
+                    class="picture-box">
                     <img
-                        v-if="($store.state.pages[pageNumber].allImages.length > 0)"
                         class="picture-box regular-image"
                         :src="'data:image/jpeg;base64,' + $store.state.pages[pageNumber].allImages[$store.state.pages[pageNumber].selectedImage]"/>
                 </div>
@@ -30,6 +31,10 @@ export default {
         },
         active: {
             type: Boolean,
+            required: true
+        },
+        selectedImage: {
+            type: Number,
             required: true
         }
     },
