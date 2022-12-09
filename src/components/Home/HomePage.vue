@@ -10,7 +10,6 @@
       <h2>Add a title to begin a new story!</h2>
       <TitleForm></TitleForm>
     </section>
-
   <section class="container"
     v-if="$store.state.currentTitle !== ''">
       <div class="top-of-page">
@@ -44,6 +43,15 @@
         />
     </div>
   </section>
+  <section class="alerts">
+      <article
+            v-for="(status, alert, index) in $store.state.alerts"
+            :key="index"
+            :class="status"
+        >
+            <p>{{ alert }}</p>
+        </article>
+    </section>
 </article>
 </template>
 
@@ -75,6 +83,10 @@ export default {
         }
         this.editing = false;
         this.currentPage = Object.keys(this.$store.state.pages).length
+        const message = 'Page has been successfully saved.'
+        this.$store.commit('alert', {
+                    message: message, status: 'success'
+        });
       },
       getPage(value) {
         const page = this.$store.state.pages[value]

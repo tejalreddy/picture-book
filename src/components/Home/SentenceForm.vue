@@ -81,10 +81,6 @@ export default {
                     frequency_penalty: 0,
                     presence_penalty: .3
                 }),
-                // callback: () => {
-                //     this.$set(this.alerts, params.message, 'success');
-                //     setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-                // }
             };
         
             
@@ -104,7 +100,6 @@ export default {
                 const r = await fetch(`https://api.openai.com/v1/completions`, options);
                 if (!r.ok) {
                     const res = await r.json();
-                    console.log(res);
                     throw new Error(res.error);
                 }
                 
@@ -112,9 +107,10 @@ export default {
                 this.sentences = res.choices.map(choice => choice.text);
                 this.$store.commit("refreshGeneratedSentence", {pageNum: this.pageNum, sentences: this.sentences});
             } catch (e) {
-                console.log(e);
-                // this.$set(this.alerts, e, 'error');
-                // setTimeout(() => this.$delete(this.alerts, e), 3000);
+                const message = 'There was an error fetching suggested sentences';
+                this.$store.commit('alert', {
+                    message: message, status: 'error'
+                });
             }
         }
     }

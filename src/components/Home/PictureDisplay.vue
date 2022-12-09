@@ -134,10 +134,15 @@ export default {
                 this.selected = [false, false, false, false];
                 this.images = res.data.map(data_json => data_json.b64_json);
                 this.$store.commit("refreshGeneratedImages", {pageNum: this.pageNum, images: this.images})
+                const message = 'Successfully generated images!';
+                this.$store.commit('alert', {
+                    message: message, status: 'success'
+                });
             } catch (e) {
-                console.log(e);
-                // this.$set(this.alerts, e, 'error');
-                // setTimeout(() => this.$delete(this.alerts, e), 3000);
+                const message = 'There was an error fetching images';
+                this.$store.commit('alert', {
+                    message: message, status: 'error'
+                });
             }
         }
     }
