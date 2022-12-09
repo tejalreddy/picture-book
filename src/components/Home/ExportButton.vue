@@ -12,7 +12,7 @@
         :float-layout="true"
         :enable-download="true"
         :preview-modal="true"
-        :paginate-elements-by-height="1400"
+        :paginate-elements-by-height="1122"
         filename="picture-book"
         :pdf-quality="2"
         :manual-pagination="false"
@@ -24,12 +24,13 @@
         >
         <section slot="pdf-content">
             <div
+                :id="pageNumber"
                 v-for="index in Object.keys($store.state.pages).length"
                 :key="index">
                 <PagePdfTemplate
                     :pageNumber="index"
+                    :selectedImage="$store.state.pages[index].selectedImage"
                 />
-                <div class="html2pdf__page-break"></div>
             </div>
         </section>
     </vue-html2pdf>
@@ -44,6 +45,12 @@ import PagePdfTemplate from "@/components/Templates/PagePdfTemplate";
 export default {
     name: 'ExportButton',
     components: {VueHtml2pdf, PagePdfTemplate},
+    props: {
+        pageNumber: {
+            type: Number,
+            required: true
+        }
+    },
     mounted() {
         const converter = document.getElementById("pdf-converter");
         converter.html2Pdf = {

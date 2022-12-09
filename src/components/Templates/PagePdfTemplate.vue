@@ -1,7 +1,9 @@
 <template>
     <section class="page">
-        <div class="picture-box">
-            <img v-if="($store.state.pages[pageNumber].selectedImage > -1)"
+        <div
+            class="picture-box"
+            v-if="(selectedImage > -1)">
+            <img
             class="picture-box regular-image"
             :src="'data:image/jpeg;base64,' + $store.state.pages[pageNumber].allImages[$store.state.pages[pageNumber].selectedImage]"/>
         </div>
@@ -17,6 +19,10 @@ export default {
     name: 'PagePdfTemplate',
     props: {
         pageNumber: {
+            type: Number,
+            required: true
+        },
+        selectedImage: {
             type: Number,
             required: true
         }

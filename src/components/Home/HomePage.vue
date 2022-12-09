@@ -1,9 +1,10 @@
 <template>
   <article>
-    <!-- <ExportButton
-      v-if="$store.state.currentTitle !== ''"
-      class="export-button">
-    </ExportButton> -->
+    <ExportButton
+      v-if="($store.state.currentTitle !== '')"
+      class="export-button"
+      :pageNumber="currentPage">
+    </ExportButton>
     <section v-if="$store.state.currentTitle === ''"
       class="title-section">
       <h2>Add a title to begin a new story!</h2>
