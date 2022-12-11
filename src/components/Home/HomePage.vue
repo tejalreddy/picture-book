@@ -97,7 +97,7 @@ export default {
       getPage(value) {
         const page = this.$store.state.pages[value]
         this.currentPage = value;
-        this.$store.commit("changeSentence", page.caption);
+        this.$store.commit('changeSentence', {pageNum: this.currentPage, sentence: page.caption});
         this.editing = true;
       }
     }

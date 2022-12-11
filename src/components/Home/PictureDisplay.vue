@@ -65,7 +65,7 @@ export default {
     data() {
         return {
             selected: [false, false, false, false], // top_left, top_right, bottom_left, bottom_right
-            images: [],
+            images: this.$store.state.pages[this.pageNum].allImages ? this.$store.state.pages[this.pageNum].allImages : [],
             alerts: {}
         }
     },
@@ -170,6 +170,7 @@ export default {
 
 .box:hover {
     box-shadow: rgba(0, 0, 0, 0.2) 0 4px 12px;
+    cursor:pointer;
 }
 
 .regular-image {

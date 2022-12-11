@@ -37,8 +37,12 @@ Vue.use(Vuex);
         changeSentence(state, payload) {
           /**
            * Change current title for the page being worked on
+           * payload: {pageNum: number, sentence: string}
            */
-          state.currentSentence = payload;
+          state.currentSentence = payload.sentence;
+          if (payload.sentence) {
+            state.pages[payload.pageNum].caption = payload.sentence;
+          }
         },
         editPage(state, payload) {
           /**

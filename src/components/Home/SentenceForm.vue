@@ -71,7 +71,7 @@ export default {
                     message: message, status: 'error'
                 });
             } else {
-                this.$store.commit('changeSentence', this.draft);
+                this.$store.commit('changeSentence', {pageNum: this.pageNum, sentence: this.draft});
             }
         },
         generateSentence() {

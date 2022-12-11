@@ -81,13 +81,13 @@ export default {
     margin: 1em;
     display: inline-block;
     overflow-y: scroll;
+    cursor:pointer;
 }
 
 .box-text {
     text-align: center;
     margin-top: 5em;
     font-size: 10px;
-    /* width: 223px; */
     white-space:normal;
     word-wrap:break-word;
 }
