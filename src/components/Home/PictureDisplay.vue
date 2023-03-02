@@ -74,13 +74,7 @@ export default {
             // if there are no generated images but there is a sentence then we want to generate
             // if there are generated images but the sentence is different then we want to generate
             if (this.$store.state.currentSentence !== '') {
-                if (this.$store.state.pages[this.pageNum].allImages.length === 0) {
-                    this.generateImages();
-                } else {
-                    if (this.$store.state.currentSentence !== this.$store.state.pages[this.pageNum].caption) {
-                        this.generateImages();
-                    }
-                }
+                this.generateImages();
             } else {
                 this.images = this.$store.state.pages[this.pageNum].allImages
             }

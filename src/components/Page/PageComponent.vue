@@ -41,9 +41,9 @@ export default {
     watch: {
         active: function(val) {
             const box = document.getElementById(this.pageNumber);
-            if (val) {
-                box.style.transform = 'translateY(-13px)';
-                box.style.boxShadow = 'rgba(0, 0, 0, 0.3) 0 4px 12px'
+            if (this.active) {
+                box.style.transform = 'translateY(-15px)';
+                box.style.boxShadow = 'rgba(0, 0, 0, 0.2) 0 4px 12px'
             } else {
                 box.style.transform = 'translateY(0px)';
                 box.style.boxShadow = 'rgba(0, 0, 0, 0) 0 4px 12px';
