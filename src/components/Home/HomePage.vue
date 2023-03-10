@@ -7,7 +7,16 @@
     </ExportButton>
     <section v-if="$store.state.currentTitle === ''"
       class="title-section">
-      <h2>Add a title to begin a new story!</h2>
+      <h2
+        v-if="$store.state.username">
+      Welcome {{ $store.state.username }}
+      </h2>
+      <h2 v-if="$store.state.username">
+        Add a title to begin a new story!
+      </h2>
+      <h2 v-if="!$store.state.username">
+        Enter in your username
+      </h2>
       <TitleForm></TitleForm>
     </section>
   <section class="container"
@@ -18,13 +27,15 @@
         <h1>Currently editing page {{ currentPage }}</h1>
         <PictureDisplay
           class="picture-display"
-          :pageNum="currentPage">
+          :pageNum="currentPage"
+          :changeCount="changeCount">
         </PictureDisplay>
       </div>
     <section>
       <SentenceForm
         class="sentence-form"
-        :pageNum="currentPage">
+        :pageNum="currentPage"
+        @sentenceEdited="sendNotificationToGeneration">
       </SentenceForm>
       <button
         class="finish-button button-74"
@@ -72,6 +83,7 @@ export default {
         currentPage: Object.keys(this.$store.state.pages).length,
         previousSentence: "",
         refreshGenerated: {pageNum: 1, sentence: `This is a story about ${this.$store.state.currentTitle}`},
+        changeCount: 0,
       }
     },
     methods: {
@@ -99,6 +111,9 @@ export default {
         this.currentPage = value;
         this.$store.commit('changeSentence', {pageNum: this.currentPage, sentence: page.caption});
         this.editing = true;
+      },
+      sendNotificationToGeneration(value) {
+        this.changeCount += 1;
       }
     }
 }

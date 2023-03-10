@@ -1,7 +1,7 @@
 <template>
     <article>
         <div @click="boxClicked"
-            :id="pageNumber"
+            :id="'box-' + pageNumber"
             class="page-box">
             <div v-if="(selectedImage > -1)"
                 class="box-content">
@@ -40,7 +40,7 @@ export default {
     },
     watch: {
         active: function(val) {
-            const box = document.getElementById(this.pageNumber);
+            const box = document.getElementById('box-' + this.pageNumber);
             if (this.active) {
                 box.style.transform = 'translateY(-15px)';
                 box.style.boxShadow = 'rgba(0, 0, 0, 0.2) 0 4px 12px'

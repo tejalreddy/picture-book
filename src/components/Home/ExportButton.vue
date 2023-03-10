@@ -23,6 +23,7 @@
         ref="html2Pdf"
         >
         <section slot="pdf-content">
+            <TitlePageTemplate></TitlePageTemplate>
             <div
                 :id="pageNumber"
                 v-for="index in Object.keys($store.state.pages).length"
@@ -41,10 +42,11 @@
 /* eslint-disable */
 import VueHtml2pdf from "vue-html2pdf";
 import PagePdfTemplate from "@/components/Templates/PagePdfTemplate";
+import TitlePageTemplate from "@/components/Templates/TitlePageTemplate";
 
 export default {
     name: 'ExportButton',
-    components: {VueHtml2pdf, PagePdfTemplate},
+    components: {VueHtml2pdf, PagePdfTemplate, TitlePageTemplate},
     props: {
         pageNumber: {
             type: Number,
@@ -58,6 +60,13 @@ export default {
                 useCORS: true,
             }
         };
+        // firebase document
+        // const docSnap = await getDoc(doc(db, this.nameDraft, this.draft))
+        // if (docSnap.exists()) {
+        //     this.pages = docSnap.data().pages
+        // } else {
+        //     this.pages = []
+        // }
     },
     methods: {
         exportPdf() {

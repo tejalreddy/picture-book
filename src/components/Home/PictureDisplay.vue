@@ -2,6 +2,9 @@
 <section>
     <div v-if="this.images.length === 0">
         <section class="box-container">
+            <p v-if="loading"
+                class="centered">Loading...
+            </p>
             <div class="empty-box">
                 <p class="box-text">No image generated</p>
             </div>
@@ -18,12 +21,16 @@
     </div>
     <div v-if="this.images.length > 0">
         <section class="box-container">
+            <p v-if="loading"
+                class="centered">Loading...
+            </p>
             <section class="box">
                 <img
                     @click="imgClicked(0)"
                     class="box regular-image"
                     :style="{'box-shadow': selected[0] ? '0px 0px 10px 10px yellow' : ''}"
-                    :src="'data:image/jpeg;base64,' + images[0]"/>
+                    :src="'data:image/jpeg;base64,' + images[0]"
+                />
             </section>
             <section class="box">
                 <img
@@ -60,21 +67,27 @@ export default {
         pageNum: {
             type: Number,
             required: false
+        },
+        changeCount: {
+            type: Number,
+            required: true
         }
     },
     data() {
         return {
             selected: [false, false, false, false], // top_left, top_right, bottom_left, bottom_right
             images: this.$store.state.pages[this.pageNum].allImages ? this.$store.state.pages[this.pageNum].allImages : [],
+            loading: false,
             alerts: {}
         }
     },
     watch: {
-        '$store.state.currentSentence': function() {
+        changeCount: function() {
             // if there are no generated images but there is a sentence then we want to generate
             // if there are generated images but the sentence is different then we want to generate
             if (this.$store.state.currentSentence !== '') {
                 this.generateImages();
+                this.loading = true;
             } else {
                 this.images = this.$store.state.pages[this.pageNum].allImages
             }
@@ -92,13 +105,17 @@ export default {
             this.selected = [false, false, false, false];
             this.selected[imgIndex] = true;
             this.$store.commit("refreshSelectedImage", {pageNum: this.pageNum, image: imgIndex});
+            // firebase doc
+            // await updateDoc(doc(db, this.$store.state.username, this.$store.state.title), {
+            //     image: imgIndex
+            //   })
         },
         generateImages() {
             const params = {
                 method: 'POST',
                 message: 'Successfully generated images',
                 body: JSON.stringify({
-                    prompt: this.$store.state.currentSentence,
+                    prompt: 'Generate a kid friendly image of the following sentence: ' + this.$store.state.currentSentence,
                     n: 4,
                     size: '256x256',
                     response_format: 'b64_json',
@@ -132,6 +149,11 @@ export default {
                 this.$store.commit('alert', {
                     message: message, status: 'success'
                 });
+                this.loading = false;
+                // firebase doc
+                // await updateDoc(doc(db, this.$store.state.username, this.$store.state.title), {
+                //     images: this.images
+                //   })
             } catch (e) {
                 const message = 'There was an error fetching images';
                 this.$store.commit('alert', {
@@ -160,6 +182,7 @@ export default {
     background-color: lightgray;
     border-radius: 25px;
     margin: 2.5px;
+    text-align: center;
 }
 
 .box:hover {
@@ -180,6 +203,17 @@ export default {
     float: left;
     width: 440px;
     align-items: center;
+    text-align: center;
+}
+
+.centered {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color:black;
+  font-weight: bolder;
+  background-color: lightgray;
 }
 
 </style>

@@ -13,6 +13,7 @@ Vue.use(Vuex);
  */
  const store = new Vuex.Store({
     state: {
+      username: "",
       currentTitle: "", // the current title for the page being worked on
       pages: {}, // holds all of the pages currently made
       currentSentence: "", // the current sentence being worked on
@@ -33,6 +34,12 @@ Vue.use(Vuex);
              * Change current title for the page being worked on
              */
             state.currentTitle = payload;
+        },
+        addUsername(state, payload) {
+            /**
+             * Add a username for the user editing the story
+             */
+            state.username = payload;
         },
         changeSentence(state, payload) {
           /**

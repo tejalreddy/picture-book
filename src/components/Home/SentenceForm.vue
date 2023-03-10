@@ -7,7 +7,7 @@
             @input="draft = $event.target.value"
         />
         <button class="sentence-button button-74"
-        @click="addSentence">Generate Image</button>
+        @click="addSentence">Save Sentence & Generate Image</button>
     </section>
     <section>
         <p>Suggested sentences:</p>
@@ -65,13 +65,19 @@ export default {
     },
     methods: {
         addSentence() {
-            if (this.draft.length > 140) {
-                const message = 'Sentence length is greater than 140 characters';
+            const sentenceRegex = /[A-Za-z0-9 _.,!\"\'\/$]+/
+            if (sentenceRegex.test(this.draft) && this.draft.length <= 140) {
+                this.$store.commit('changeSentence', {pageNum: this.pageNum, sentence: this.draft});
+                this.$emit('sentenceEdited', true);
+            } else {
+                const message = 'Invalid sentence inputted';
                 this.$store.commit('alert', {
                     message: message, status: 'error'
                 });
-            } else {
-                this.$store.commit('changeSentence', {pageNum: this.pageNum, sentence: this.draft});
+                // Firebase doc
+                // await updateDoc(doc(db, this.$store.state.username, this.$store.state.title), {
+            //     sentence: this.draft
+            //   })
             }
         },
         generateSentence() {
@@ -113,6 +119,10 @@ export default {
                 const res = await r.json();
                 this.sentences = res.choices.map(choice => choice.text);
                 this.$store.commit("refreshGeneratedSentence", {pageNum: this.pageNum, sentences: this.sentences});
+                // firebase doc
+                // await updateDoc(doc(db, this.$store.state.username, this.$store.state.title), {
+                //     generatedSentences: this.sentences
+                //   })
             } catch (e) {
                 const message = 'There was an error fetching suggested sentences';
                 this.$store.commit('alert', {
