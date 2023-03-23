@@ -13,9 +13,6 @@ const firebaseConfig = {
     appId: store.state.appIdFirebase,
     measurementId: store.state.measurementIdFirebase
 }
-
-console.log('this is the firebase config')
-console.log(firebaseConfig)
 const app = initializeApp(firebaseConfig)
 
 // init firestore service

@@ -24,6 +24,18 @@
     <section
         v-if="$store.state.apikey == ''"
         class="api-area">
+        <div>
+            <p>
+                Visit
+                <a href="https://platform.openai.com/account/api-keys">OpenAI</a>
+                to obtain your OpenAI Api Key
+            </p>
+            <p>
+                Visit
+                <a href="https://console.firebase.google.com/">Google Firebase Storage</a>
+                to create your own Firebase Storage
+            </p>
+        </div>
         <textarea
             class="title-content api-content"
             :value="apiDraft"
@@ -189,8 +201,9 @@ export default {
 }
 
 .api-content {
-    width: 400px;
+    width: 500px;
     padding: 20px;
+    margin-bottom: 2em;
 }
 
 .title-font {
