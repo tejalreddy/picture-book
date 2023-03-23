@@ -74,10 +74,6 @@ export default {
                 this.$store.commit('alert', {
                     message: message, status: 'error'
                 });
-                // Firebase doc
-                // await updateDoc(doc(db, this.$store.state.username, this.$store.state.title), {
-            //     sentence: this.draft
-            //   })
             }
         },
         generateSentence() {
@@ -103,7 +99,7 @@ export default {
             const options = {
                 method: params.method, headers: 
                 {'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.VUE_APP_OPENAI_KEY}`}
+                'Authorization': `Bearer ${this.$store.state.apikey}`}
             };
             if (params.body) {
                 options.body = params.body;
@@ -119,10 +115,6 @@ export default {
                 const res = await r.json();
                 this.sentences = res.choices.map(choice => choice.text);
                 this.$store.commit("refreshGeneratedSentence", {pageNum: this.pageNum, sentences: this.sentences});
-                // firebase doc
-                // await updateDoc(doc(db, this.$store.state.username, this.$store.state.title), {
-                //     generatedSentences: this.sentences
-                //   })
             } catch (e) {
                 const message = 'There was an error fetching suggested sentences';
                 this.$store.commit('alert', {

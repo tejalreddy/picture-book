@@ -8,14 +8,14 @@
     <section v-if="$store.state.currentTitle === ''"
       class="title-section">
       <h2
-        v-if="$store.state.username">
-      Welcome {{ $store.state.username }}
+        v-if="$store.state.apikey">
+      Welcome to your story!
       </h2>
-      <h2 v-if="$store.state.username">
+      <h2 v-if="$store.state.apikey">
         Add a title to begin a new story!
       </h2>
-      <h2 v-if="!$store.state.username">
-        Enter in your username
+      <h2 v-if="!$store.state.apikey">
+        Enter in your API information to begin
       </h2>
       <TitleForm></TitleForm>
     </section>
@@ -51,6 +51,7 @@
           :active="(index === currentPage ? true : false)"
           :selectedImage="$store.state.pages[index].selectedImage"
           @boxClicked="getPage"
+          @pageDeleted="pageDeleted"
         />
     </div>
   </section>
@@ -114,6 +115,13 @@ export default {
       },
       sendNotificationToGeneration(value) {
         this.changeCount += 1;
+      },
+      pageDeleted(value) {
+        let maxPageNum = Object.keys(this.$store.state.pages).length;
+        if (!(maxPageNum in this.$store.state.pages)) {
+          maxPageNum = maxPageNum - 1;
+        }
+        this.getPage(maxPageNum);
       }
     }
 }

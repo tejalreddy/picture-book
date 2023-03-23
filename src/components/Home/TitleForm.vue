@@ -1,7 +1,7 @@
 <template>
 <section>
     <section
-        v-if="$store.state.username != ''"
+        v-if="$store.state.apikey != ''"
         class="title-area">
         <textarea v-if="editing || $store.state.currentTitle == ''"
             class="title-content"
@@ -22,16 +22,59 @@
     </section>
 
     <section
-        v-if="$store.state.username == ''"
-        class="title-area">
+        v-if="$store.state.apikey == ''"
+        class="api-area">
         <textarea
-            class="title-content"
-            :value="nameDraft"
-            @input="nameDraft = $event.target.value"
+            class="title-content api-content"
+            :value="apiDraft"
+            @input="apiDraft = $event.target.value"
+            placeholder="Enter your OpenAI API key"
+        />
+        <textarea
+            class="title-content api-content"
+            :value="apiFirebaseDraft"
+            @input="apiFirebaseDraft = $event.target.value"
+            placeholder="Enter your Firebase API key"
+        />
+        <textarea
+            class="title-content api-content"
+            :value="authDomainFirebase"
+            @input="authDomainFirebase = $event.target.value"
+            placeholder="Enter your Firebase Auth Domain"
+        />
+        <textarea
+            class="title-content api-content"
+            :value="projectIdFirebase"
+            @input="projectIdFirebase = $event.target.value"
+            placeholder="Enter your Firebase Project ID"
+        />
+        <textarea
+            class="title-content api-content"
+            :value="storageBucketFirebase"
+            @input="storageBucketFirebase = $event.target.value"
+            placeholder="Enter your Firebase Storage Bucket"
+        />
+        <textarea
+            class="title-content api-content"
+            :value="messagingSenderIdFirebase"
+            @input="messagingSenderIdFirebase = $event.target.value"
+            placeholder="Enter your Firebase Messaging Sender ID"
+        />
+        <textarea
+            class="title-content api-content"
+            :value="appIdFirebase"
+            @input="appIdFirebase = $event.target.value"
+            placeholder="Enter your Firebase App ID"
+        />
+        <textarea
+            class="title-content api-content"
+            :value="measurementIdFirebase"
+            @input="measurementIdFirebase = $event.target.value"
+            placeholder="Enter your Firebase Measurement ID"
         />
         <button
-            class="title-button button-74"
-            @click="addUsername">Enter in username
+            class="title-button button-74 api-button"
+            @click="addApiKey">Enter in your Api Information
         </button>
     </section>
 </section>
@@ -45,7 +88,14 @@ export default {
     data() {
         return {
             draft: this.$store.state.currentTitle,
-            nameDraft: '',
+            apiDraft: '',
+            apiFirebaseDraft: '',
+            authDomainFirebase: '',
+            projectIdFirebase: '',
+            storageBucketFirebase: '',
+            messagingSenderIdFirebase: '',
+            appIdFirebase: '',
+            measurementIdFirebase: '',
             alerts: {},
             editing: false,
         }
@@ -63,28 +113,24 @@ export default {
                 });
                 return;
             }
-            // const colRef = collection(db, 'users')
-            // const dataObj = {
-            //     username: $store.state.username,
-            //     title: this.draft
-            // }
-            // firebase document
-            // const docSnap = await getDoc(doc(db, this.nameDraft, this.draft))
-            // if (docSnap.exists()) {
-            //     emit docSnap.data().pages
-            // } else {
-            //     addDoc(db, this.nameDraft, this.draft)
-            // }
         },
         editTitle() {
             this.editing = true;
         },
-        addUsername() {
-            const usernameRegex = /^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/;
-            if (usernameRegex.test(this.nameDraft)) {
-                this.$store.commit('addUsername', this.nameDraft);
+        addApiKey() {
+            // const usernameRegex = /^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/;
+            const apiRegex = /.*/;
+            if (apiRegex.test(this.apiDraft)) {
+                this.$store.commit('addApiKey', {apiKey: this.apiDraft, 
+                apiKeyFirebase: this.apiFirebaseDraft,
+                authDomainFirebase: this.authDomainFirebase,
+                projectIdFirebase: this.projectIdFirebase,
+                storageBucketFirebase: this.storageBucketFirebase,
+                messagingSenderIdFirebase: this.messagingSenderIdFirebase,
+                appIdFirebase: this.appIdFirebase,
+                measurementIdFirebase: this.measurementIdFirebase});
             } else {
-                const message = 'Invalid username';
+                const message = 'Invalid api key';
                 this.$store.commit('alert', {
                     message: message, status: 'error'
                 });
@@ -102,6 +148,12 @@ export default {
     justify-content: center;
     height: 100px;
 }
+.api-area {
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    align-items: center;
+}
 
 .title-button {
     margin-left: 1em;
@@ -109,6 +161,10 @@ export default {
     font-size: 15px;
     height: 30px;
     margin-bottom: 3.6em;
+}
+
+.api-button {
+    line-height: 25px;
 }
 
 .edit-button {
@@ -130,6 +186,11 @@ export default {
   font-size: 16px;
   resize: none;
   margin-bottom: 3.3em;
+}
+
+.api-content {
+    width: 400px;
+    padding: 20px;
 }
 
 .title-font {
