@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import Page from './Page';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
+import imagesRef from './firebase/init';
 
 Vue.use(Vuex);
 
@@ -23,6 +24,7 @@ Vue.use(Vuex);
       appIdFirebase: "",
       measurementIdFirebase: "",
       currentTitle: "", // the current title for the page being worked on
+      titleImage: "", // the image on the title page
       pages: {}, // holds all of the pages currently made
       currentSentence: "", // the current sentence being worked on
       alerts: {}, // global success/error messages encountered during submissions to non-visible forms
@@ -63,6 +65,8 @@ Vue.use(Vuex);
             state.messagingSenderIdFirebase = payload.messagingSenderIdFirebase;
             state.appIdFirebase = payload.appIdFirebase;
             state.measurementIdFirebase = payload.measurementIdFirebase;
+            console.log('api key changed');
+            console.log(imagesRef.bucket);
         },
         changeSentence(state, payload) {
           /**
@@ -131,7 +135,7 @@ Vue.use(Vuex);
            */
           state.pages[payload.pageNum].generatedSentences = payload.sentences;
         },
-        async refreshGeneratedImages(state, payload) {
+        refreshGeneratedImages(state, payload) {
           /**
            * Stores all the generated images for a page
            * payload = {pageNum: int, images: [], imagesref: StorageReference}
@@ -151,6 +155,12 @@ Vue.use(Vuex);
 
             state.pages[payload.pageNum].allImages = images;
           }
+        },
+        refreshTitleImage(state, payload) {
+          /**
+           * Stores the title page image
+           */
+          state.titleImage = payload;
         },
         refreshSelectedImage(state, payload) {
           /**

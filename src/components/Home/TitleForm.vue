@@ -2,23 +2,35 @@
 <section>
     <section
         v-if="$store.state.apikey != ''"
-        class="title-area">
-        <textarea v-if="editing || $store.state.currentTitle == ''"
+        class="title-area"
+        :key="$store.state.measurementIdFirebase">
+        <textarea v-if="editing || $store.state.titleImage == ''"
             class="title-content"
             :value="draft"
             @input="draft = $event.target.value"
         />
-        <h1 class="title-font" v-if="!editing && $store.state.currentTitle !== ''">
+        <h1 class="title-font" v-if="!editing && $store.state.titleImage !== ''">
             {{ this.$store.state.currentTitle }}
         </h1>
-        <button v-if="editing || $store.state.currentTitle == ''"
-            class="title-button button-74"
-            @click="addTitle">Save Title
-        </button>
-        <button v-if="!editing && $store.state.currentTitle !== ''"
+        <button v-if="!editing && $store.state.titleImage !== ''"
             class="edit-button button-74"
-            @click="editTitle">Edit Title
+            @click="editTitle">Edit Title Page
         </button>
+        <button v-if="editing || $store.state.titleImage == ''"
+            class="title-button button-74"
+            @click="addTitle">Generate Image
+        </button>
+    </section>
+    <section
+        class="title-image"
+        v-if="$store.state.apikey != ''"
+        >
+        <TitleImage
+            :currentTitle="draft"
+            :generateImage="generateImage"
+            @titleEditing="titleEditing"
+            v-if="editing || $store.state.titleImage == ''">
+        </TitleImage>
     </section>
 
     <section
@@ -94,12 +106,15 @@
 
 <script>
 /* eslint-disable */
+import TitleImage from '@/components/Page/TitleImage.vue';
 
 export default {
     name: 'TitleForm',
+    components: {TitleImage},
     data() {
         return {
             draft: this.$store.state.currentTitle,
+            generateImage: 0,
             apiDraft: '',
             apiFirebaseDraft: '',
             authDomainFirebase: '',
@@ -117,7 +132,7 @@ export default {
             const titleRegex = /^[A-Za-z0-9\s\-_,\.;:()]+$/
             if (titleRegex.test(this.draft) && this.draft.length <= 140) {
                 this.$store.commit('changeTitle', this.draft);
-                this.editing = false;
+                this.generateImage += 1;
             } else {
                 const message = 'Invalid title inputted';
                 this.$store.commit('alert', {
@@ -128,19 +143,24 @@ export default {
         },
         editTitle() {
             this.editing = true;
+            this.$emit('titleEditing', true);
+        },
+        titleEditing() {
+            this.editing = false;
+            this.$emit('titleEditing', false);
         },
         addApiKey() {
-            // const usernameRegex = /^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/;
             const apiRegex = /.*/;
+            this.apiDraft = this.apiDraft.trim();
             if (apiRegex.test(this.apiDraft)) {
                 this.$store.commit('addApiKey', {apiKey: this.apiDraft, 
-                apiKeyFirebase: this.apiFirebaseDraft,
-                authDomainFirebase: this.authDomainFirebase,
-                projectIdFirebase: this.projectIdFirebase,
-                storageBucketFirebase: this.storageBucketFirebase,
-                messagingSenderIdFirebase: this.messagingSenderIdFirebase,
-                appIdFirebase: this.appIdFirebase,
-                measurementIdFirebase: this.measurementIdFirebase});
+                apiKeyFirebase: this.apiFirebaseDraft.trim(),
+                authDomainFirebase: this.authDomainFirebase.trim(),
+                projectIdFirebase: this.projectIdFirebase.trim(),
+                storageBucketFirebase: this.storageBucketFirebase.trim(),
+                messagingSenderIdFirebase: this.messagingSenderIdFirebase.trim(),
+                appIdFirebase: this.appIdFirebase.trim(),
+                measurementIdFirebase: this.measurementIdFirebase.trim()});
             } else {
                 const message = 'Invalid api key';
                 this.$store.commit('alert', {

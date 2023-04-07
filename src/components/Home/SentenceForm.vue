@@ -67,7 +67,7 @@ export default {
         addSentence() {
             const sentenceRegex = /[A-Za-z0-9 _.,!\"\'\/$]+/
             if (sentenceRegex.test(this.draft) && this.draft.length <= 140) {
-                this.$store.commit('changeSentence', {pageNum: this.pageNum, sentence: this.draft});
+                this.$store.commit('changeSentence', {pageNum: this.pageNum, sentence: this.draft.trim()});
                 this.$emit('sentenceEdited', true);
             } else {
                 const message = 'Invalid sentence inputted';

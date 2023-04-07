@@ -58,15 +58,9 @@ export default {
         converter.html2Pdf = {
             html2canvas: {
                 useCORS: true,
+                allowTaint: true
             }
         };
-        // firebase document
-        // const docSnap = await getDoc(doc(db, this.nameDraft, this.draft))
-        // if (docSnap.exists()) {
-        //     this.pages = docSnap.data().pages
-        // } else {
-        //     this.pages = []
-        // }
     },
     methods: {
         exportPdf() {

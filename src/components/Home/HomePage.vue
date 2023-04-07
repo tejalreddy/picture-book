@@ -1,11 +1,11 @@
 <template>
   <article>
     <ExportButton
-      v-if="($store.state.currentTitle !== '')"
+      v-if="($store.state.titleImage !== '')"
       class="export-button"
       :pageNumber="currentPage">
     </ExportButton>
-    <section v-if="$store.state.currentTitle === ''"
+    <section v-if="$store.state.titleImage === ''"
       class="title-section">
       <h2
         v-if="$store.state.apikey">
@@ -17,9 +17,13 @@
       <h2 v-if="!$store.state.apikey">
         Enter in your API information to begin
       </h2>
-      <TitleForm></TitleForm>
+      <TitleForm
+        class="top-of-page"
+        @titleEditing="titleEditing"
+        >
+      </TitleForm>
       <section
-        v-if="$store.state.currentTitle == ''"
+        v-if="$store.state.titleImage == '' && $store.state.apikey != ''"
         class="disclaimers">
         <h3>By continuing, you agree to the following:</h3>
         <li>The content generated from this site is solely for personal use and may not be used for commercial purposes without proper licensing or permission.</li>
@@ -29,11 +33,14 @@
         <li>The developer of the tool assumes no liability for any damages arising from the use of the tool or the resulting content, including but not limited to direct, indirect, incidental, and consequential damages.</li>
       </section>
     </section>
+    <TitleForm
+        class="top-of-page title-form-section"
+        v-if="$store.state.titleImage !== ''"
+        @titleEditing="titleEditing">
+    </TitleForm>
   <section class="container"
-    v-if="$store.state.currentTitle !== ''">
+    v-if="$store.state.titleImage !== '' && !editingTitle">
       <div class="top-of-page">
-        <TitleForm>
-        </TitleForm>
         <h1>Currently editing page {{ currentPage }}</h1>
         <PictureDisplay
           class="picture-display"
@@ -53,7 +60,7 @@
       </button>
     </section>
     <div class="page-component"
-      v-if="$store.state.currentTitle !== ''">
+      v-if="$store.state.titleImage !== ''">
         <PageComponent
         v-for="index in Object.keys($store.state.pages).length"
           :key="index"
@@ -73,7 +80,7 @@
         >
             <p>{{ alert }}</p>
         </article>
-    </section>
+  </section>
 </article>
 </template>
 
@@ -95,6 +102,7 @@ export default {
         previousSentence: "",
         refreshGenerated: {pageNum: 1, sentence: `This is a story about ${this.$store.state.currentTitle}`},
         changeCount: 0,
+        editingTitle: false,
       }
     },
     methods: {
@@ -132,6 +140,9 @@ export default {
           maxPageNum = maxPageNum - 1;
         }
         this.getPage(maxPageNum);
+      },
+      titleEditing(value) {
+        this.editingTitle = value;
       }
     }
 }
@@ -193,5 +204,9 @@ export default {
     height: 100%;
     text-align: center;
     align-self: center;
+}
+
+.title-form-section {
+  margin-left: 11em;
 }
 </style>
