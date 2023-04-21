@@ -17,25 +17,10 @@
       <h2 v-if="!$store.state.apikey">
         Enter in your API information to begin
       </h2>
-      <TitleForm
-        class="top-of-page"
-        @titleEditing="titleEditing"
-        >
-      </TitleForm>
-      <section
-        v-if="$store.state.titleImage == '' && $store.state.apikey != ''"
-        class="disclaimers">
-        <h3>By continuing, you agree to the following:</h3>
-        <li>The content generated from this site is solely for personal use and may not be used for commercial purposes without proper licensing or permission.</li>
-        <li>You are responsible for ensuring that any generated content does not infringe on any intellectual property rights, including but not limited to copyright, trademarks, and publicity rights.</li>
-        <li>You are aware that this tool may produce content that is not appropriate for all ages, and you are solely responsible for determining the appropriateness of the content for their audience.</li>
-        <li>The tool may produce content that contains errors, inaccuracies, or omissions, and you assume all risk associated with using the tool and the resulting content.</li>
-        <li>The developer of the tool assumes no liability for any damages arising from the use of the tool or the resulting content, including but not limited to direct, indirect, incidental, and consequential damages.</li>
-      </section>
     </section>
     <TitleForm
-        class="top-of-page title-form-section"
-        v-if="$store.state.titleImage !== ''"
+        class="top-of-page"
+        :style="[$store.state.titleImage !== '' ? {'margin-left': '11em'} : '']"
         @titleEditing="titleEditing">
     </TitleForm>
   <section class="container"
@@ -194,16 +179,6 @@ export default {
 .export-button {
   float:right;
   margin-right: 40px;
-}
-
-.disclaimers {
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-    height: 100%;
-    text-align: center;
-    align-self: center;
 }
 
 .title-form-section {

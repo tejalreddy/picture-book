@@ -29,6 +29,7 @@
                 v-for="index in Object.keys($store.state.pages).length"
                 :key="index">
                 <PagePdfTemplate
+                    v-if="$store.state.pages[index].caption !== ''"
                     :pageNumber="index"
                     :selectedImage="$store.state.pages[index].selectedImage"
                 />

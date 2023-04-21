@@ -154,6 +154,7 @@ export default {
                 this.$store.commit('alert', {
                     message: message, status: 'error'
                 });
+                this.loading = false;
             }
         }
     }
