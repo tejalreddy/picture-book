@@ -39,10 +39,14 @@
         :pageNum="currentPage"
         @sentenceEdited="sendNotificationToGeneration">
       </SentenceForm>
-      <button
-        class="finish-button button-74"
-        @click="finishPage">Save Page
-      </button>
+      <NextSentenceForm
+        class="sentence-form"
+        :pageNum="currentPage"
+        :changeCount="saveNextSentence"
+        :changedPage="nextSentenceInfo"
+        @finishPage="finishPage"
+        >
+      </NextSentenceForm>
     </section>
     <div class="page-component"
       v-if="$store.state.titleImage !== ''">
@@ -73,13 +77,14 @@
 /* eslint-disable */
 import TitleForm from '@/components/Home/TitleForm.vue'
 import SentenceForm from '@/components/Home/SentenceForm.vue'
+import NextSentenceForm from '@/components/Home/NextSentenceForm.vue'
 import PageComponent from '@/components/Page/PageComponent.vue'
 import PictureDisplay from '@/components/Home/PictureDisplay.vue'
 import ExportButton from '@/components/Home/ExportButton.vue'
 
 export default {
     name: 'HomePage',
-    components: {TitleForm, SentenceForm, PageComponent, PictureDisplay, ExportButton},
+    components: {TitleForm, SentenceForm, NextSentenceForm, PageComponent, PictureDisplay, ExportButton},
     data() {
       return {
         editing: false,
@@ -87,6 +92,8 @@ export default {
         previousSentence: "",
         refreshGenerated: {pageNum: 1, sentence: `This is a story about ${this.$store.state.currentTitle}`},
         changeCount: 0,
+        saveNextSentence: 0,
+        nextSentenceInfo: 0,
         editingTitle: false,
       }
     },
@@ -100,6 +107,8 @@ export default {
           return;
         }
         this.$store.commit("editPage", this.currentPage);
+        this.saveNextSentence += 1;
+        this.nextSentenceInfo = this.currentPage;
         if (this.currentPage === Object.keys(this.$store.state.pages).length) {
           this.$store.commit('createPage');
         }

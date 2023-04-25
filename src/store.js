@@ -113,6 +113,12 @@ Vue.use(Vuex);
           state.pages[Object.keys(state.pages).length + 1] = page;
           state.currentSentence = '';
         },
+        editNextSentence(state, payload) {
+          /**
+           * Edits in the next sentence on the page
+           */
+          state.pages[payload.pageNum].nextCaption = payload.sentence;
+        },
         deletePage(state, payload) {
           /**
            * Deletes contents of a page based on the specified page number

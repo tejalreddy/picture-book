@@ -48,83 +48,20 @@
                 to create your own Firebase Storage
             </p>
         </div>
-        <form @submit.prevent ="addApiKey">
+        <form @submit.prevent ="getEncryptedItems">
             <input
                 class="title-content api-content"
-                :value="apiDraft"
-                type="text"
-                @input="apiDraft = $event.target.value"
+                :value="password"
+                type="password"
+                @input="password = $event.target.value"
                 maxlength="200"
-                placeholder="Enter your OpenAI API key"
-                :required="true"
-            />
-            <input
-                class="title-content api-content"
-                :value="apiFirebaseDraft"
-                type="text"
-                @input="apiFirebaseDraft = $event.target.value"
-                maxlength="200"
-                placeholder="Enter your Firebase API key"
-                :required="true"
-            />
-            <input
-                class="title-content api-content"
-                :value="authDomainFirebase"
-                type="text"
-                @input="authDomainFirebase = $event.target.value"
-                maxlength="200"
-                placeholder="Enter your Firebase Auth Domain"
-                :required="true"
-            />
-            <input
-                class="title-content api-content"
-                :value="projectIdFirebase"
-                type="text"
-                @input="projectIdFirebase = $event.target.value"
-                maxlength="200"
-                placeholder="Enter your Firebase Project ID"
-                :required="true"
-            />
-            <input
-                class="title-content api-content"
-                :value="storageBucketFirebase"
-                type="text"
-                @input="storageBucketFirebase = $event.target.value"
-                maxlength="200"
-                placeholder="Enter your Firebase Storage Bucket"
-                :required="true"
-            />
-            <input
-                class="title-content api-content"
-                :value="messagingSenderIdFirebase"
-                type="text"
-                @input="messagingSenderIdFirebase = $event.target.value"
-                maxlength="200"
-                placeholder="Enter your Firebase Messaging Sender ID"
-                :required="true"
-            />
-            <input
-                class="title-content api-content"
-                :value="appIdFirebase"
-                type="text"
-                @input="appIdFirebase = $event.target.value"
-                maxlength="200"
-                placeholder="Enter your Firebase App ID"
-                :required="true"
-            />
-            <input
-                class="title-content api-content"
-                :value="measurementIdFirebase"
-                type="text"
-                @input="measurementIdFirebase = $event.target.value"
-                maxlength="200"
-                placeholder="Enter your Firebase Measurement ID"
+                placeholder="Enter your password"
                 :required="true"
             />
             <button
                 class="title-button button-74 api-button"
                 type="submit"
-                >Enter in your Api Information
+                >Enter in your information
             </button>
         </form>
     </section>
@@ -134,7 +71,6 @@
 <script>
 /* eslint-disable */
 import TitleImage from '@/components/Page/TitleImage.vue';
-import { throws } from 'assert';
 
 export default {
     name: 'TitleForm',
@@ -143,21 +79,13 @@ export default {
         return {
             draft: this.$store.state.currentTitle,
             generateImage: 0,
-            apiDraft: this.$store.state.apiKey,
-            apiFirebaseDraft: this.$store.state.apiKeyFirebase,
-            authDomainFirebase: this.$store.state.authDomainFirebase,
-            projectIdFirebase: this.$store.state.projectIdFirebase,
-            storageBucketFirebase: this.$store.state.storageBucketFirebase,
-            messagingSenderIdFirebase: this.$store.state.messagingSenderIdFirebase,
-            appIdFirebase: this.$store.state.appIdFirebase,
-            measurementIdFirebase: this.$store.state.measurementIdFirebase,
-            password: '',
+            password: this.$store.state.password,
             alerts: {},
             editing: false,
         }
     },
     mounted() {
-        if (this.$store.state.userId && !this.$store.state.apikey) {
+        if (this.$store.state.userId && !this.password) {
             this.getEncryptedItems();
         }
     },
@@ -191,47 +119,12 @@ export default {
                 
                 const res = await r.json();
                 if (res.success) {
-                    const credential_info = JSON.parse(this.$CryptoJS.AES.decrypt(res.accountInfo, this.$store.state.uniqueId).toString(this.$CryptoJS.enc.Utf8));
-                    this.apiDraft = credential_info.apiKey
-                    this.apiFirebaseDraft = credential_info.apiKeyFirebase
-                    this.authDomainFirebase = credential_info.authDomainFirebase
-                    this.projectIdFirebase = credential_info.projectIdFirebase
-                    this.storageBucketFirebase = credential_info.storageBucketFirebase
-                    this.messagingSenderIdFirebase = credential_info.messagingSenderIdFirebase
-                    this.appIdFirebase = credential_info.appIdFirebase
-                    this.measurementIdFirebase = credential_info.measurementIdFirebase
+                    const credential_info = JSON.parse(this.$CryptoJS.AES.decrypt(res.accountInfo, this.password).toString(this.$CryptoJS.enc.Utf8));
+                    credential_info['password'] = this.password
+                    this.$store.commit('addApiKey', credential_info);
                 }
-
             } catch (e) {
                 const message = 'There was an error fetching your credentials';
-                this.$store.commit('alert', {
-                    message: message, status: 'error'
-                });
-            }
-        },
-        async updateRequest(params, credential_object) {
-            const options = {
-                method: params.method, headers: 
-                {'Content-Type': 'application/json'}
-            };
-            if (params.body) {
-                options.body = params.body;
-            }
-
-            try {
-                const r = await fetch(`https://wall-e.media.mit.edu:3000/update-account`, options);
-                if (!r.ok) {
-                    console.log('error thrown');
-                    const res = await r.json();
-                    throw new Error(res.error);
-                }
-                
-                const res = await r.json();
-                if (res.success) { 
-                    this.$store.commit('addApiKey', credential_object);
-                }  
-            } catch (e) {
-                const message = 'There was an error updating your account';
                 this.$store.commit('alert', {
                     message: message, status: 'error'
                 });
@@ -257,38 +150,6 @@ export default {
         titleEditing() {
             this.editing = false;
             this.$emit('titleEditing', false);
-        },
-        addApiKey() {
-            const apiRegex = /.*/;
-            this.apiDraft = this.apiDraft.trim();
-            if (apiRegex.test(this.apiDraft)) {
-                const credential_object = {
-                    apiKey: this.apiDraft, 
-                    apiKeyFirebase: this.apiFirebaseDraft.trim(),
-                    authDomainFirebase: this.authDomainFirebase.trim(),
-                    projectIdFirebase: this.projectIdFirebase.trim(),
-                    storageBucketFirebase: this.storageBucketFirebase.trim(),
-                    messagingSenderIdFirebase: this.messagingSenderIdFirebase.trim(),
-                    appIdFirebase: this.appIdFirebase.trim(),
-                    measurementIdFirebase: this.measurementIdFirebase.trim(),
-                    password: this.password.trim()
-                }
-                const params = {
-                        method: 'POST',
-                        message: 'Successfully generated images',
-                        body: JSON.stringify({
-                            username: this.$store.state.userId,
-                            accountInfo: this.$CryptoJS.AES.encrypt(JSON.stringify(credential_object), this.$store.state.uniqueId).toString()
-                        }),
-                };
-                this.updateRequest(params, credential_object);
-            } else {
-                const message = 'Invalid api key';
-                this.$store.commit('alert', {
-                    message: message, status: 'error'
-                });
-                return;
-            }
         }
     }
 }
