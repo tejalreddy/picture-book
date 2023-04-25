@@ -16,56 +16,14 @@ export default {
     if (Object.keys(this.$store.state.pages).length === 0) {
       this.$store.commit('createPage')
     }
-    this.testCall();
   },
   watch: {
     '$store.state.measurementIdFirebase': function() {
       window.location.reload();
+    },
+    '$store.state.password': function() {
+      this.testCall();
     }
-  },
-  methods: {
-    testCall() {
-      const params = {
-                method: 'GET',
-                // message: 'Successfully generated images',
-                // body: JSON.stringify({
-                //     prompt: 'An image that could be in a picture book of the following sentence: ' + this.$store.state.currentTitle,
-                //     n: 1,
-                //     size: '256x256',
-                //     response_format: 'b64_json',
-                // }),
-            };
-        // this.request(params);
-    }, 
-    async request(params) {
-        // const options = {
-        //   method: params.method, headers: 
-        //   {'Content-Type': 'application/json'}
-        // };
-        // if (params.body) {
-        //     options.body = params.body;
-        // }
-        
-        try {
-            console.log('request starting');
-            const r = await fetch(`https://wall-e.media.mit.edu:3000/url`);
-            if (!r.ok) {
-                console.log('error thrown');
-                const res = await r.json();
-                throw new Error(res.error);
-            }
-            
-            console.log('response is ', r);
-            const res = await r.json();
-            console.log('got response back');
-            console.log(res);
-        } catch (e) {
-            const message = 'There was an error fetching images';
-            this.$store.commit('alert', {
-                message: message, status: 'error'
-            });
-        }
-        }
   }
 }
 </script>

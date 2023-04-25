@@ -15,6 +15,8 @@ Vue.use(Vuex);
  */
  const store = new Vuex.Store({
     state: {
+      userId: "",
+      uniqueId: "",
       apikey: "",
       apiKeyFirebase: "",
       authDomainFirebase: "",
@@ -23,6 +25,7 @@ Vue.use(Vuex);
       messagingSenderIdFirebase: "",
       appIdFirebase: "",
       measurementIdFirebase: "",
+      password: "",
       currentTitle: "", // the current title for the page being worked on
       titleImage: "", // the image on the title page
       pages: {}, // holds all of the pages currently made
@@ -65,8 +68,7 @@ Vue.use(Vuex);
             state.messagingSenderIdFirebase = payload.messagingSenderIdFirebase;
             state.appIdFirebase = payload.appIdFirebase;
             state.measurementIdFirebase = payload.measurementIdFirebase;
-            console.log('api key changed');
-            console.log(imagesRef.bucket);
+            state.password = payload.password;
         },
         changeSentence(state, payload) {
           /**
@@ -168,6 +170,12 @@ Vue.use(Vuex);
            * payload = {pageNum: int, image: number}
            */
            state.pages[payload.pageNum].selectedImage = payload.image;
+        },
+        updateUserId(state, payload) {
+          state.userId = payload;
+        },
+        updateUniqueId(state, payload) {
+          state.uniqueId = payload;
         }
     },
     plugins: [createPersistedState({storage: window.sessionStorage})]
