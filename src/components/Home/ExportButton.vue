@@ -66,6 +66,16 @@ export default {
     methods: {
         exportPdf() {
             this.$refs.html2Pdf.generatePdf();
+            this.exportJson();
+        },
+        exportJson() {
+            const data = JSON.stringify(this.$store.state.pages)
+            const blob = new Blob([data], {type: 'text/plain'})
+            let a = document.createElement('a');
+            a.download = "storifAI_data.json";
+            a.href = window.URL.createObjectURL(blob);
+            a.click();
+            window.URL.revokeObjectURL(a.href);
         }
     }
 }
