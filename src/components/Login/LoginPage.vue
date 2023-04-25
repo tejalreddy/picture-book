@@ -3,7 +3,7 @@
     <main>
         <section>
             <header>
-                <h2>Login to begin creating your AI Picture Book</h2>
+                <h2>Login to StorifAI</h2>
             </header>
         </section>
         <div style="display: flex; justify-content: center"
