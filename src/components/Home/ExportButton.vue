@@ -13,7 +13,7 @@
         :enable-download="true"
         :preview-modal="true"
         :paginate-elements-by-height="1122"
-        filename="picture-book"
+        filename="storifAI-book"
         :pdf-quality="2"
         :manual-pagination="false"
         pdf-format="a4"
@@ -29,7 +29,7 @@
                 v-for="index in Object.keys($store.state.pages).length"
                 :key="index">
                 <PagePdfTemplate
-                    v-if="$store.state.pages[index].caption !== ''"
+                    v-if="$store.state.pages[index].caption !== '' && $store.state.pages[index].selectedImage !== -1"
                     :pageNumber="index"
                     :selectedImage="$store.state.pages[index].selectedImage"
                 />
