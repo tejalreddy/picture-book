@@ -131,7 +131,7 @@ export default {
             }
         },
         addTitle() {
-            const titleRegex = /^[A-Za-z0-9\s\-_,\.;:()]+$/
+            const titleRegex = /[A-Za-z0-9 _.,!\"\'\/$]+/
             if (titleRegex.test(this.draft.trim()) && this.draft.trim().length <= 140) {
                 this.$store.commit('changeTitle', this.draft.trim());
                 this.generateImage += 1;
