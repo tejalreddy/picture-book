@@ -18,4 +18,6 @@ const app = initializeApp(firebaseConfig)
 // init firestore service
 const firebaseStorage = getStorage(app)
 const imagesRef = ref(firebaseStorage, 'images')
-export default imagesRef
+const jsonRef = ref(firebaseStorage, 'jsons')
+
+export { imagesRef, jsonRef }

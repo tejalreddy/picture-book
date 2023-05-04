@@ -25,7 +25,7 @@
 </template>
 <script>
 /* eslint-disable */
-import imagesRef from '../../firebase/init';
+import { imagesRef } from '../../firebase/init';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 
 export default {
@@ -103,6 +103,8 @@ export default {
                 
                 const storageId = new Date().getTime().toString();
                 let newestRef = ref(imagesRef, storageId);
+                newestRef = ref(newestRef, this.$store.state.userId);
+                newestRef = ref(newestRef, new Date().toJSON());
                 uploadString(newestRef, images, "base64").then(async (snapshot) => {
                     this.image = await getDownloadURL(snapshot.ref);
                     this.loading = false;

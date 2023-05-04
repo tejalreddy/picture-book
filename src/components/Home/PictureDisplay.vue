@@ -61,7 +61,7 @@
 <script>
 /* eslint-disable */
 // 'data:image/jpeg;base64,'
-import imagesRef from '../../firebase/init'
+import { imagesRef } from '../../firebase/init'
 export default {
     name: 'PictureDisplay',
     props: {
