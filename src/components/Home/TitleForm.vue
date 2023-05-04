@@ -84,11 +84,6 @@ export default {
             editing: false,
         }
     },
-    mounted() {
-        if (this.$store.state.userId && !this.password) {
-            this.getEncryptedItems();
-        }
-    },
     methods: {
         getEncryptedItems() {
             const params = {
