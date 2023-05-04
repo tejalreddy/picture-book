@@ -81,7 +81,6 @@ export default {
             draft: this.$store.state.currentTitle,
             generateImage: 0,
             password: this.$store.state.password,
-            alerts: {},
             editing: false,
         }
     },
@@ -133,8 +132,8 @@ export default {
         },
         addTitle() {
             const titleRegex = /^[A-Za-z0-9\s\-_,\.;:()]+$/
-            if (titleRegex.test(this.draft) && this.draft.length <= 140) {
-                this.$store.commit('changeTitle', this.draft);
+            if (titleRegex.test(this.draft.trim()) && this.draft.trim().length <= 140) {
+                this.$store.commit('changeTitle', this.draft.trim());
                 this.generateImage += 1;
             } else {
                 const message = 'Invalid title inputted';

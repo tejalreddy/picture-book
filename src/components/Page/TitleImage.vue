@@ -32,7 +32,6 @@ export default {
     name: 'TitleImage',
     data() {
         return {
-            alerts: {},
             loading: false,
             image: this.$store.state.titleImage,
         }
