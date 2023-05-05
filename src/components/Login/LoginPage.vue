@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      clientId: 'INSERT CLIENT_ID'
+      clientId: 'INSERT CLIENT_ID HERE'
     }
   },
   watch: {
@@ -49,6 +49,7 @@ export default {
       const profileData = JSON.parse(atob(jwtCredentials.split('.')[1]))
       this.$store.commit('updateUserId', profileData.email)
       this.$store.commit('updateUniqueId', profileData.sub)
+      this.$store.commit('updateJwtCreds', jwtCredentials)
     }
   }
 }
