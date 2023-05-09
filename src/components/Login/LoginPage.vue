@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      clientId: 'INSERT CLIENT_ID HERE'
+      clientId: 'INSERT PROJECT CLIENT_ID HERE'
     }
   },
   watch: {
